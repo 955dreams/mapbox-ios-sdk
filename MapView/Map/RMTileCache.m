@@ -426,7 +426,6 @@
 - (void)cancelBackgroundCache
 {
     __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
-    __weak RMTileCache *weakSelf = self;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
     {
@@ -435,13 +434,6 @@
             [weakBackgroundFetchQueue cancelAllOperations];
             [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
 
-            if ([weakSelf markCachingComplete])
-            {
-                if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
-                {
-                    [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
-                }
-            }
         });
     });
 }
